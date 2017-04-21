@@ -14,6 +14,8 @@ py if not vim.eval("s:current_dir") in sys.path:
 py import coquille
 
 function! coquille#ShowPanels()
+	tabnew
+	let l:tabnb = tabpagenr()
     " open the Goals & Infos panels before going back to the main window
     let l:winnb = winnr()
     rightbelow vnew Goals
