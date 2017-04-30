@@ -34,6 +34,7 @@ endfunction
 function! coquille#KillSession()
     let s:coq_running = 0
 
+	echom 'erasing buf'.s:goal_buf
     execute 'bdelete' . s:goal_buf
     execute 'bdelete' . s:info_buf
     py coquille.kill_coqtop()
@@ -100,6 +101,8 @@ function! coquille#Launch(...)
         " nothing really problematic will happen, as sync will be called the next
         " time you explicitly call a command (be it 'rewind' or 'interp')
         au InsertEnter <buffer> py coquille.sync()
+
+		au VimLeave * call coquille#KillSession()
     endif
 endfunction
 

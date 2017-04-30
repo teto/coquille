@@ -3,8 +3,23 @@ import re
 import subprocess
 import xml.etree.ElementTree as ET
 import signal
+import logging
 
 from collections import deque, namedtuple
+
+
+log = logging.getLogger("coquille")
+# ch = logging.StreamHandler()
+
+# # %(asctime)s - %
+# formatter = logging.Formatter('%(name)s:%(levelname)s: %(message)s')
+# ch.setFormatter(formatter)
+handler = logging.FileHandler("mptcpanalyzer.log", delay=False)
+
+# log.addHandler(ch)
+log.addHandler(handler)
+log.setLevel(logging.DEBUG)
+
 
 Ok = namedtuple('Ok', ['val', 'msg'])
 Err = namedtuple('Err', ['err'])
@@ -182,7 +197,7 @@ def get_answer():
                     vp = parse_response(valueNode)
                     if messageNode is not None:
                         if isinstance(vp, Ok):
-                            return Ok(vp.val, parse_value(messageNode).val)
+                            return Ok(vp.val, parse_value(messageNode))
                     return vp
             except ET.ParseError:
                 continue

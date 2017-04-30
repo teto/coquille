@@ -91,7 +91,7 @@ let s:tactic = '\C\<\%(absurd\|apply\|assert\|assumption\|auto\|case_eq\|change\
         " current line begins with '|':
       elseif currentline =~ '^\s*|'
         return ind
-        
+ 
         " start of proof
       elseif previousline =~ '^\s*Proof\.$'
         let s:inside_proof = 1

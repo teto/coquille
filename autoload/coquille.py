@@ -181,14 +181,15 @@ def refresh():
     show_info()
     reset_color()
 
+def get_buffer_goal():
+    for b in vim.buffers:
+        if re.match(".*Goals$", b.name):
+            return b
+
 def show_goal():
     global info_msg
 
-    buff = None
-    for b in vim.buffers:
-        if re.match(".*Goals$", b.name):
-            buff = b
-            break
+    buff = get_buffer_goal()
     del buff[:]
 
     response = CT.goals()
@@ -197,13 +198,18 @@ def show_goal():
         vim.command("call coquille#KillSession()")
         print('ERROR: the Coq process died')
         return
-
-    if response.msg is not None:
-        info_msg = response.msg
-
-    if response.val.val is None:
-        buff.append('No goals.')
+    elif isinstance(response, CT.Err):
+        print("Error %s", response)
         return
+    else:
+        # if isinstance(Ok, response):
+
+        if response.msg is not None:
+            info_msg = response.msg
+
+        if response.val.val is None:
+            buff.append('No goals.')
+            return
 
     goals = response.val.val
 
